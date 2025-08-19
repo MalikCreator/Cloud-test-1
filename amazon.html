@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shopverse — Your Everything Store</title>
+  <meta name="description" content="Amazon‑style e‑commerce homepage template (no branded assets)." />
+  <style>
+    :root {
+      /* Tweak these to adjust the vibe */
+      --bg: #0f1111;           /* header background */
+      --bg-2: #232f3e;         /* subnav background */
+      --accent: #febd69;       /* primary accent */
+      --accent-2: #f3a847;     /* accent hover */
+      --text: #f8f8f8;         /* light text */
+      --muted: #ddd;           /* muted text */
+      --chip: #e3e6e6;         /* light chip bg */
+      --card: #fff;            /* card bg */
+      --body: #eaeded;         /* page bg */
+      --link: #007185;         /* link color */
+      --shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--body);
+      color: #111;
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Top Header */
+    .header {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--bg);
+      color: var(--text);
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .header-inner {
+      display: grid; grid-template-columns: 160px 220px 1fr 420px 180px; gap: .75rem; align-items: center;
+      padding: .5rem 1rem;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: .5rem; cursor: pointer; padding: .25rem .5rem; border-radius: .5rem;
+    }
+    .brand:hover { outline: 1px solid rgba(255,255,255,.2); }
+    .brand-logo { width: 34px; height: 34px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: grid; place-items: center; font-weight: 800; color: #111; }
+    .brand-text { font-weight: 700; font-size: 1.1rem; letter-spacing: .3px; }
+
+    .deliver {
+      display: flex; align-items: center; gap: .5rem; font-size: .9rem; color: var(--muted);
+      padding: .25rem .5rem; border-radius: .5rem;
+    }
+    .deliver:hover { outline: 1px solid rgba(255,255,255,.2); }
+    .deliver strong { color: var(--text); font-weight: 700; }
+
+    /* Search */
+    .search {
+      display: grid; grid-template-columns: 140px 1fr 56px; overflow: hidden; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+    }
+    .search select { border: none; padding: .75rem; background: #e6e6e6; font-weight: 600; }
+    .search input { border: none; padding: .75rem; }
+    .search button { border: none; background: var(--accent); font-weight: 700; }
+    .search button:hover { background: var(--accent-2); cursor: pointer; }
+
+    /* Locale / Account / Cart */
+    .locale, .account, .orders, .cart {
+      display: flex; align-items: center; gap: .4rem; padding: .25rem .5rem; border-radius: .5rem; justify-content: center;
+    }
+    .locale:hover, .account:hover, .orders:hover, .cart:hover { outline: 1px solid rgba(255,255,255,.2); cursor: pointer; }
+    .tiny { font-size: .8rem; color: var(--muted); }
+    .bold { font-weight: 700; color: var(--text); }
+
+    /* Subnav */
+    .subnav { background: var(--bg-2); color: var(--text); }
+    .subnav-inner { display: flex; gap: .75rem; padding: .5rem 1rem; overflow-x: auto; scrollbar-width: thin; }
+    .chip { background: transparent; color: var(--text); padding: .35rem .6rem; border-radius: .4rem; white-space: nowrap; border: 1px solid transparent; }
+    .chip:hover { border-color: rgba(255,255,255,.2); cursor: pointer; }
+
+    /* Hero */
+    .hero { position: relative; }
+    .hero-track { display: flex; overflow: hidden; }
+    .hero-slide { min-width: 100%; height: min(52vw, 420px); background-size: cover; background-position: center; }
+    .hero-controls { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 .5rem; pointer-events: none; }
+    .hero-btn { pointer-events: all; width: 44px; height: 44px; border-radius: 999px; border: none; background: rgba(255,255,255,.85); display: grid; place-items: center; font-size: 1.2rem; }
+    .hero-btn:hover { background: #fff; cursor: pointer; }
+
+    .hero-strip {
+      position: absolute; left: 0; right: 0; bottom: 10px; margin: 0 auto; max-width: 1400px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 0 1rem; }
+
+    /* Cards */
+    .grid { display: grid; gap: 1rem; padding: 1rem; grid-template-columns: repeat(4, 1fr); max-width: 1400px; margin: 0 auto; }
+    .card { background: var(--card); border-radius: .6rem; box-shadow: var(--shadow); padding: 1rem; display: flex; flex-direction: column; gap: .75rem; }
+    .card h3 { margin: 0; font-size: 1.05rem; }
+    .card .thumbs { display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem; }
+    .thumb { background: #f7f7f7; border-radius: .4rem; height: 110px; background-size: cover; background-position: center; }
+    .card .more { font-size: .9rem; }
+
+    /* Deals row */
+    .row { background: var(--card); border-radius: .6rem; box-shadow: var(--shadow); padding: 1rem; overflow: hidden; }
+    .row h3 { margin: 0 0 1rem 0; }
+    .scroller { display: grid; grid-auto-flow: column; grid-auto-columns: 180px; gap: .75rem; overflow-x: auto; padding-bottom: .5rem; }
+    .deal { background: #f7f7f7; border-radius: .4rem; height: 200px; display: grid; place-items: center; font-weight: 700; }
+
+    /* Sign‑in CTA */
+    .signin-cta { background: var(--card); box-shadow: var(--shadow); border-radius: .6rem; padding: 1rem; text-align: center; }
+    .btn { display: inline-block; padding: .6rem 1rem; border-radius: .5rem; background: linear-gradient(180deg, #f7dfa5, #f0c14b); border: 1px solid #9c7e31; color: #111; font-weight: 700; }
+    .btn:hover { filter: brightness(1.03); }
+
+    /* Footer */
+    .backtop { background: #364759; color: var(--text); text-align: center; padding: .8rem; font-weight: 600; }
+    .footer { background: var(--bg-2); color: var(--text); margin-top: 2rem; }
+    .footer-inner { max-width: 1400px; margin: 0 auto; padding: 2rem 1rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .footer h4 { margin: 0 0 .6rem 0; }
+    .footer a { color: #ddd; font-size: .95rem; display: block; margin: .25rem 0; }
+    .subfooter { background: var(--bg); color: #aaa; padding: 1rem; text-align: center; font-size: .9rem; }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .header-inner { grid-template-columns: 140px 1fr 1fr 260px 130px; }
+      .deliver { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      .header-inner { grid-template-columns: 120px 1fr 80px; row-gap: .5rem; }
+      .locale, .orders { display: none; }
+      .account { justify-self: end; }
+      .search { grid-column: 1 / -1; }
+      .hero-strip { grid-template-columns: 1fr 1fr; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero-slide { height: 42vw; min-height: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <div class="brand-logo">S</div>
+        <div class="brand-text">Shopverse</div>
+      </div>
+
+      <div class="deliver" title="Delivery location">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
+        <div>
+          <div class="tiny">Deliver to</div>
+          <div class="bold">Pakistan</div>
+        </div>
+      </div>
+
+      <form class="search" onsubmit="event.preventDefault()">
+        <select aria-label="Category">
+          <option selected>All</option>
+          <option>Electronics</option>
+          <option>Books</option>
+          <option>Fashion</option>
+          <option>Home</option>
+        </select>
+        <input aria-label="Search" type="search" placeholder="Search Shopverse" />
+        <button aria-label="Search">🔍</button>
+      </form>
+
+      <div class="locale" title="Language">
+        <span>🌐</span>
+        <div>
+          <div class="tiny">Language</div>
+          <div class="bold">EN</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:.5rem; justify-content:flex-end;">
+        <div class="account">
+          <div>
+            <div class="tiny">Hello, sign in</div>
+            <div class="bold">Account & Lists</div>
+          </div>
+        </div>
+        <div class="orders">
+          <div>
+            <div class="tiny">Returns</div>
+            <div class="bold">& Orders</div>
+          </div>
+        </div>
+        <div class="cart" title="Cart">
+          🛒 <span class="bold">Cart</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="subnav">
+      <div class="subnav-inner">
+        <div class="chip">☰ All</div>
+        <div class="chip">Today's Deals</div>
+        <div class="chip">Customer Service</div>
+        <div class="chip">Registry</div>
+        <div class="chip">Gift Cards</div>
+        <div class="chip">Sell</div>
+        <div class="chip">Best Sellers</div>
+        <div class="chip">New Releases</div>
+        <div class="chip">Home & Kitchen</div>
+        <div class="chip">Mobiles</div>
+        <div class="chip">Fashion</div>
+        <div class="chip">Electronics</div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO SLIDER -->
+  <section class="hero">
+    <div class="hero-track" id="heroTrack">
+      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1514511547117-f9c3ea581c9a?q=80&w=1600&auto=format&fit=crop');"></div>
+      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1600&auto=format&fit=crop');"></div>
+      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1517420878257-463729f6a006?q=80&w=1600&auto=format&fit=crop');"></div>
+    </div>
+    <div class="hero-controls">
+      <button class="hero-btn" id="prevBtn" aria-label="Previous">◀</button>
+      <button class="hero-btn" id="nextBtn" aria-label="Next">▶</button>
+    </div>
+
+    <!-- Floating card strip over hero (like Amazon's boxes) -->
+    <div class="hero-strip">
+      <div class="card signin-cta">
+        <p>Sign in for the best experience</p>
+        <a class="btn" href="#">Sign in securely</a>
+      </div>
+      <div class="card">
+        <h3>Gaming accessories</h3>
+        <div class="thumbs">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1527430253228-e93688616381?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1585079542156-2755d9c8aff1?q=80&w=800&auto=format&fit=crop');"></div>
+        </div>
+        <a class="more" href="#">See more</a>
+      </div>
+      <div class="card">
+        <h3>Health & personal care</h3>
+        <div class="thumbs">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1498842812179-c81beecf902c?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1517365830460-955ce3ccd263?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1580943941548-c0a87e9d09ab?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop');"></div>
+        </div>
+        <a class="more" href="#">Shop now</a>
+      </div>
+      <div class="card">
+        <h3>Refresh your space</h3>
+        <div class="thumbs">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1505692794403-34d4982f88aa?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1455778977538-9531ee9f67b6?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop');"></div>
+        </div>
+        <a class="more" href="#">Explore</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN GRID -->
+  <main style="max-width:1400px;margin:220px auto 0; padding: 0 1rem 1rem;">
+    <section class="row" aria-label="Deals for you">
+      <h3>Today’s top deals</h3>
+      <div class="scroller">
+        <div class="deal">Up to 30% off</div>
+        <div class="deal">Limited time</div>
+        <div class="deal">Under $25</div>
+        <div class="deal">Lightning deal</div>
+        <div class="deal">Bundle & Save</div>
+        <div class="deal">New arrivals</div>
+        <div class="deal">Top rated</div>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Shop by category">
+      <article class="card">
+        <h3>Electronics</h3>
+        <div class="thumbs">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1511389026070-a14ae610a1be?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1458063048042-9f1f5d97e332?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1512446816042-444d641267a5?q=80&w=800&auto=format&fit=crop');"></div>
+        </div>
+        <a class="more" href="#">See more</a>
+      </article>
+
+      <article class="card">
+        <h3>Home & Kitchen</h3>
+        <div class="thumbs">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1493666438817-866a91353ca9?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1455778977538-9531ee9f67b6?q=80&w=800&auto=format&fit=crop');"></div>
+        </div>
+        <a class="more" href="#">See more</a>
+      </article>
+
+      <article class="card">
+        <h3>Fashion</h3>
+        <div class="thumbs">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1520975922284-406d4906f907?q=80&w=800&auto=format&fit=crop');"></div>
+        </div>
+        <a class="more" href="#">See more</a>
+      </article>
+
+      <article class="card">
+        <h3>Beauty & Grooming</h3>
+        <div class="thumbs">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1616394584738-fc6e612e71b7?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1571781418606-868a62a9f7b4?q=80&w=800&auto=format&fit=crop');"></div>
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=800&auto=format&fit=crop');"></div>
+        </div>
+        <a class="more" href="#">See more</a>
+      </article>
+    </section>
+
+    <section class="grid" aria-label="More to explore">
+      <article class="card">
+        <h3>Top picks for you</h3>
+        <div class="thumb" style="height:240px;background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop');"></div>
+        <a class="more" href="#">Shop now</a>
+      </article>
+      <article class="card">
+        <h3>New arrivals in toys</h3>
+        <div class="thumb" style="height:240px;background-image:url('https://images.unsplash.com/photo-1492106087820-71f1a00d2b29?q=80&w=1200&auto=format&fit=crop');"></div>
+        <a class="more" href="#">Explore</a>
+      </article>
+      <article class="card">
+        <h3>Work from home</h3>
+        <div class="thumb" style="height:240px;background-image:url('https://images.unsplash.com/photo-1473091534298-04dcbce3278c?q=80&w=1200&auto=format&fit=crop');"></div>
+        <a class="more" href="#">Upgrade your setup</a>
+      </article>
+      <article class="card">
+        <h3>Smart home</h3>
+        <div class="thumb" style="height:240px;background-image:url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1200&auto=format&fit=crop');"></div>
+        <a class="more" href="#">Discover devices</a>
+      </article>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <div class="backtop"><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a></div>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <h4>Get to Know Us</h4>
+        <a href="#">About Shopverse</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#">Sustainability</a>
+      </div>
+      <div>
+        <h4>Make Money with Us</h4>
+        <a href="#">Sell products</a>
+        <a href="#">Advertise your products</a>
+        <a href="#">Affiliate program</a>
+        <a href="#">Fulfillment</a>
+      </div>
+      <div>
+        <h4>Payment Products</h4>
+        <a href="#">Shopverse Pay</a>
+        <a href="#">Business Card</a>
+        <a href="#">Reload Balance</a>
+        <a href="#">Currency Converter</a>
+      </div>
+      <div>
+        <h4>Let Us Help You</h4>
+        <a href="#">Your Account</a>
+        <a href="#">Shipping Rates & Policies</a>
+        <a href="#">Returns & Replacements</a>
+        <a href="#">Help</a>
+      </div>
+    </div>
+    <div class="subfooter">© <span id="year"></span> Shopverse. Built with a design inspired by large marketplaces. No affiliation or endorsement implied.</div>
+  </footer>
+
+  <script>
+    // Current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Simple hero slider
+    const track = document.getElementById('heroTrack');
+    const prev = document.getElementById('prevBtn');
+    const next = document.getElementById('nextBtn');
+    let index = 0; const count = track.children.length;
+    function go(i){ index = (i + count) % count; track.style.transform = `translateX(${-100*index}%)`; track.style.transition = 'transform .5s ease'; }
+    prev.addEventListener('click', ()=>go(index-1));
+    next.addEventListener('click', ()=>go(index+1));
+    setInterval(()=>go(index+1), 5000);
+  </script>
+</body>
+</html>
